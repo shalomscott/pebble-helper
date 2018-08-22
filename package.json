@@ -1,0 +1,10 @@
+{
+  "name": "pebble-helper",
+  "version": "1.0.0",
+  "main": "app.js",
+  "author": "Shalom Steinbach",
+  "dependencies": {
+    "express": "^4.16.3",
+    "pdf-parser": "^1.0.4"
+  }
+}
