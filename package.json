@@ -1,7 +1,6 @@
 {
   "name": "pebble-helper",
-  "version": "1.0.0",
-  "main": "app.js",
+  "version": "1.1.0",
   "author": "Shalom Steinbach",
   "scripts": {
     "start": "node app.js"

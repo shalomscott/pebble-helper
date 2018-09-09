@@ -1,38 +1,23 @@
 'use strict';
 
 const app = require('express')();
-const pdfParser = require('pdf-parser');
 
-const HOPS_TO_MINCHA = 6;
-const months = ['01','02','03','04','05','06','07','08','09','10','11','12'];
+const glenwoodHelper = require('./helpers/glenwood.js');
 
-app.get('/mincha', (req, res) => {
-	pdfParser.pdf2json('glenwood.pdf', (err, pdf) => {
-		if (err != null) {
-			console.error(err);
-			res.sendStatus(500);
-		} else {
-			const texts = pdf.pages[0].texts;
-			const sundayKey = getMondayString();
-			let i;
-			for (i = 0; i < texts.length; ++i) {
-				if (texts[i].text === sundayKey) {
-					const mincha = texts[i - HOPS_TO_MINCHA].text;
-					res.send(mincha);
-				}
-			}
-			if (i === texts.length)
-				res.sendStatus(400);
-		}
-	});
-});
+app.get('/mincha', (req, res) => glenwoodHelper.getMincha()
+	.then(mincha => res.send(mincha))
+	.catch(err => res.status(err.status).send(err.message))
+);
 
-function getMondayString() {
-	const today = new Date();
-	const diff = today.getDate() - today.getDay() + 1;
-	const sunday = new Date(today.setDate(diff));
-	return sunday.getDate() + '/' + months[sunday.getMonth()];
-}
+app.get('/shabbat', (req, res) => glenwoodHelper.getShabbat()
+	.then(shabbat => res.send(shabbat))
+	.catch(err => res.status(err.status).send(err.message))
+);
+
+app.get('/tzeit', (req, res) => glenwoodHelper.getTzeit()
+	.then(tzeit => res.send(tzeit))
+	.catch(err => res.status(err.status).send(err.message))
+);
 
 app.listen(process.env.PORT || 3000, () => console.log('pebble-helper started!'));
 
